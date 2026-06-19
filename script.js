@@ -303,49 +303,87 @@ if (factButton && factPanel) {
   });
 }
 
-/* ---------- Scroll-triggered ambient fact bubble (gradually revealed as you scroll) ---------- */
+/* ---------- Scroll-triggered fun fact bubbles ---------- */
 const sectionFacts = {
-  about: "Fun fact: I'm drawn to basic circuit work alongside code — debugging hardware feels a lot like debugging software.",
-  experience: "Fun fact: on my VEX team I don't just write code — I help fine-tune automation and movement accuracy for competition runs.",
-  skills: "Fun fact: time management is a skill I had to build the hard way, juggling tutoring, robotics, and multiple sports at once.",
-  projects: "Fun fact: Robotics Club is where I get to mix mechanical builds with code integration — my favorite combo.",
-  research: "Fun fact: when I tutored chess, I focused on building a strong base first, then layering skills one at a time.",
-  contact: "Fun fact: I fix my mistakes quickly and try to bring that same quick-learner mindset to how I follow up with people.",
+  about:      { emoji: '🎯', text: "I'm the programmer on VEX Robotics Team 2474V — coding in Python, HTML, and CSS.", pos: 'left' },
+  experience: { emoji: '🏀', text: "I was a basketball semi-finalist at SFO and finalist at Indus International School.", pos: 'right' },
+  skills:     { emoji: '♟️', text: "I'm a chess champion — SFO Chess champion and interschool champion.", pos: 'left' },
+  projects:   { emoji: '🏸', text: "Badminton is my main sport — I love the fast decision-making it demands.", pos: 'right' },
+  research:   { emoji: '🧮', text: "I'm a Math Olympiad winner (2023–2024) and tutored middle schoolers in Algebra & Geometry.", pos: 'left' },
+  contact:    { emoji: '🚀', text: "Long-term goal: build AI products and master entrepreneurship alongside software dev.", pos: 'right' },
 };
 
-const scrollFactBubble = document.getElementById('scrollFactBubble');
-const scrollFactText = document.getElementById('scrollFactText');
-const scrollFactClose = document.querySelector('.scroll-fact-close');
+const bubblesContainer = document.getElementById('factBubblesContainer');
 const shownFacts = new Set();
-let scrollFactTimer = null;
+const activeBubbles = [];
 
-const showScrollFact = (text) => {
-  if (!scrollFactBubble) return;
-  scrollFactText.textContent = text;
-  scrollFactBubble.setAttribute('aria-hidden', 'false');
-  if (scrollFactTimer) clearTimeout(scrollFactTimer);
-  scrollFactTimer = setTimeout(() => {
-    scrollFactBubble.setAttribute('aria-hidden', 'true');
-  }, 6000);
-};
+function spawnFactBubble(id, fact) {
+  const bubble = document.createElement('div');
+  bubble.className = 'fact-bubble fact-bubble--' + fact.pos;
+  bubble.setAttribute('role', 'status');
 
-if (scrollFactBubble) {
-  scrollFactClose.addEventListener('click', () => {
-    scrollFactBubble.setAttribute('aria-hidden', 'true');
-    if (scrollFactTimer) clearTimeout(scrollFactTimer);
+  const inner = document.createElement('div');
+  inner.className = 'fact-bubble__inner';
+
+  const emoji = document.createElement('span');
+  emoji.className = 'fact-bubble__emoji';
+  emoji.textContent = fact.emoji;
+
+  const text = document.createElement('p');
+  text.className = 'fact-bubble__text';
+  text.textContent = fact.text;
+
+  const close = document.createElement('button');
+  close.className = 'fact-bubble__close';
+  close.setAttribute('aria-label', 'Dismiss');
+  close.textContent = '✕';
+  close.addEventListener('click', () => dismissBubble(bubble));
+
+  inner.appendChild(emoji);
+  inner.appendChild(text);
+  inner.appendChild(close);
+  bubble.appendChild(inner);
+  bubblesContainer.appendChild(bubble);
+
+  // reflow then animate in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { bubble.classList.add('fact-bubble--visible'); });
   });
 
+  // Auto-dismiss after 6s
+  const timer = setTimeout(() => dismissBubble(bubble), 6000);
+  bubble._timer = timer;
+  activeBubbles.push(bubble);
+
+  // Limit to 2 bubbles visible at once
+  if (activeBubbles.length > 2) {
+    dismissBubble(activeBubbles[0]);
+  }
+}
+
+function dismissBubble(bubble) {
+  clearTimeout(bubble._timer);
+  bubble.classList.remove('fact-bubble--visible');
+  bubble.classList.add('fact-bubble--out');
+  setTimeout(() => {
+    if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
+    const idx = activeBubbles.indexOf(bubble);
+    if (idx > -1) activeBubbles.splice(idx, 1);
+  }, 420);
+}
+
+if (bubblesContainer) {
   const factObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const id = entry.target.id;
         if (entry.isIntersecting && sectionFacts[id] && !shownFacts.has(id)) {
           shownFacts.add(id);
-          showScrollFact(sectionFacts[id]);
+          setTimeout(() => spawnFactBubble(id, sectionFacts[id]), 300);
         }
       });
     },
-    { threshold: 0.1, rootMargin: '0px 0px -20% 0px' }
+    { threshold: 0.25, rootMargin: '0px 0px -10% 0px' }
   );
 
   Object.keys(sectionFacts).forEach((id) => {
@@ -353,34 +391,6 @@ if (scrollFactBubble) {
     if (el) factObserver.observe(el);
   });
 }
-
-// Insert inline fun-fact badges under each section heading and reveal them when the section comes into view
-Object.keys(sectionFacts).forEach((id) => {
-  const el = document.getElementById(id);
-  if (!el) return;
-  // find or create a heading container
-  let heading = el.querySelector('.section-heading');
-  if (!heading) heading = el;
-  const badge = document.createElement('span');
-  badge.className = 'fun-fact';
-  badge.textContent = sectionFacts[id];
-  heading.appendChild(badge);
-});
-
-// Observe those badges to add .visible class when their section is scrolled into view
-const badgeObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    const badge = entry.target.querySelector('.fun-fact');
-    if (!badge) return;
-    if (entry.isIntersecting) badge.classList.add('visible');
-    else badge.classList.remove('visible');
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -20% 0px' });
-
-Object.keys(sectionFacts).forEach((id) => {
-  const el = document.getElementById(id);
-  if (el) badgeObserver.observe(el);
-});
 
 /* ---------- Easter egg sprite popups ---------- */
 const eggPopup = document.getElementById('eggPopup');

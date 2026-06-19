@@ -29,7 +29,7 @@
     <button id="themeToggle" class="theme-toggle" aria-label="Toggle light and dark mode">🌙</button>
     <header class="hero" id="home">
       <div class="hero-copy">
-        <p class="eyebrow">Software Developer Intern</p>
+        <p class="eyebrow"> Future Software Developer Intern</p>
         <h1>Hi, I’m Ritvik</h1>
         <p class="hero-text">
           I am building an electronics recycling app with research-driven design, polished interaction, and accessible web experiences.
@@ -45,15 +45,15 @@
           <p class="card-title">Resume Snapshot</p>
           <div class="card-row">
             <strong>Experience</strong>
-            <span>Software Intern · Web Development · UI/UX</span>
+            <span>Software Intern · Web Development </span>
           </div>
           <div class="card-row">
             <strong>Skills</strong>
-            <span>Python · HTML · CSS · Debugging · Circuits</span>
+            <span>Python · HTML · CSS </span>
           </div>
           <div class="card-row">
             <strong>Education</strong>
-            <span>Sophomore · Walnut Grove HS, Prosper TX</span>
+            <span>Junior · Walnut Grove HS, Prosper TX</span>
           </div>
           <div class="hero-stat-grid">
             <div class="stat-card">
@@ -226,8 +226,8 @@
             </p>
           </div>
           <div class="contact-actions">
-            <a href="mailto:ritvik@example.com" class="button button-primary">Send Email</a>
-            <button class="button button-secondary pop-trigger" data-modal="contactModal" type="button">Quick message</button>
+            <a href="mailto:ritvikvadde2010@gmail.com" class="contact-link">ritvikvadde2010@gmail.com</a>
+            <a href="tel:+19864441238" class="contact-link">+1 (986) 444-1238</a>
             <p class="contact-note">Available for school projects, app design, and AI learning opportunities.</p>
           </div>
         </div>
@@ -254,18 +254,10 @@
     <div class="modal-overlay" data-modal-close></div>
     <div class="modal-panel popable" role="document">
       <button class="modal-close" aria-label="Close modal" data-modal-close>✕</button>
-      <h3 id="contactModalTitle">Quick Message</h3>
-      <p>If you'd like to collaborate, email me at <a href="mailto:ritvik@example.com">ritvik@example.com</a> or leave a quick note here.</p>
-      <form class="modal-form">
-        <label>
-          <span class="sr-only">Your message</span>
-          <textarea name="message" rows="4" placeholder="Hi Ritvik — I'm interested in..." required></textarea>
-        </label>
-        <div style="margin-top:12px; display:flex; gap:8px;">
-          <button type="submit" class="button button-primary">Send</button>
-          <button type="button" class="button button-secondary" data-modal-close>Cancel</button>
-        </div>
-      </form>
+      <h3 id="contactModalTitle">Get in Touch</h3>
+      <p>If you'd like to collaborate, reach out directly:</p>
+      <p><a href="mailto:ritvikvadde2010@gmail.com">ritvikvadde2010@gmail.com</a></p>
+      <p><a href="tel:+19864441238">+1 (986) 444-1238</a></p>
     </div>
   </div>
 
@@ -300,11 +292,8 @@
     <button type="button" class="button button-secondary fact-next-btn">Next fact →</button>
   </div>
 
-  <!-- Scroll-triggered fact bubble (one ambient, dismissible card) -->
-  <div id="scrollFactBubble" class="scroll-fact" aria-hidden="true">
-    <p id="scrollFactText"></p>
-    <button type="button" class="scroll-fact-close" aria-label="Dismiss">✕</button>
-  </div>
+  <!-- Scroll-triggered fact bubbles -->
+  <div id="factBubblesContainer" aria-live="polite" aria-atomic="false"></div>
 
   <!-- Easter egg fact popup (for background sprites) -->
   <div id="eggPopup" class="egg-popup" aria-hidden="true">
