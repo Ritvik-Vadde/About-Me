@@ -1,418 +1,142 @@
-const themeToggle = document.getElementById('themeToggle');
+/* ============ Theme toggle ============ */
 const root = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
 const savedTheme = localStorage.getItem('theme');
 
 const applyTheme = (theme) => {
   root.setAttribute('data-theme', theme);
-  if (themeToggle) themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  if (themeToggle) themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
   localStorage.setItem('theme', theme);
 };
 
 applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
 
-themeToggle.addEventListener('click', () => {
-  const current = root.getAttribute('data-theme');
-  applyTheme(current === 'dark' ? 'light' : 'dark');
-});
-
-const buttons = document.querySelectorAll('.button');
-buttons.forEach((button) => {
-  button.addEventListener('mouseenter', () => {
-    button.style.transform = 'translateY(-2px) scale(1.03)';
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
   });
-  button.addEventListener('mouseleave', () => {
-    button.style.transform = '';
-  });
-});
+}
 
-const revealSections = document.querySelectorAll('.section.reveal');
-const observer = new IntersectionObserver(
+/* ============ Mobile menu ============ */
+const navMenuToggle = document.getElementById('navMenuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+
+if (navMenuToggle && mobileMenu) {
+  const closeMenu = () => {
+    navMenuToggle.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('data-open', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+  };
+  navMenuToggle.addEventListener('click', () => {
+    const isOpen = navMenuToggle.getAttribute('aria-expanded') === 'true';
+    navMenuToggle.setAttribute('aria-expanded', String(!isOpen));
+    mobileMenu.setAttribute('data-open', String(!isOpen));
+    mobileMenu.setAttribute('aria-hidden', String(isOpen));
+  });
+  mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+}
+
+/* ============ Scroll reveal for sections ============ */
+const revealSections = document.querySelectorAll('.section');
+const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
       }
     });
   },
-  { threshold: 0.2 }
+  { threshold: 0.15 }
 );
-revealSections.forEach((section) => observer.observe(section));
+revealSections.forEach((section) => revealObserver.observe(section));
 
-const projectToggle = document.querySelector('.project-toggle-btn');
-const projectCard = document.querySelector('.project-card');
-if (projectToggle && projectCard) {
-  projectToggle.addEventListener('click', () => {
-    projectCard.classList.toggle('show-details');
-    projectToggle.textContent = projectCard.classList.contains('show-details')
-      ? 'Hide research details'
-      : 'Show research details';
-    // brief pop animation for minimal interactivity
-    if (projectCard.classList.contains('show-details')) {
-      projectCard.classList.add('pop-animate');
-      setTimeout(() => projectCard.classList.remove('pop-animate'), 520);
-    }
-  });
-}
+/* ============ Expand / collapse toggles (project + research) ============ */
+document.querySelectorAll('[data-toggle]').forEach((btn) => {
+  const targetId = btn.getAttribute('data-toggle');
+  const target = document.getElementById(targetId);
+  if (!target) return;
 
-const researchToggle = document.querySelector('.research-toggle-btn');
-const researchDocument = document.querySelector('.research-document');
-if (researchToggle && researchDocument) {
-  researchToggle.addEventListener('click', () => {
-    const isOpen = researchDocument.classList.toggle('show');
-    document.body.classList.toggle('research-open', isOpen);
-    document.documentElement.classList.toggle('research-open', isOpen);
-    researchToggle.textContent = isOpen
-      ? 'Hide the full research document'
-      : 'Read the full research document';
-    researchDocument.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-    // add a pop animation when opening
-    if (isOpen) {
-      researchDocument.classList.add('pop-animate');
-      setTimeout(() => researchDocument.classList.remove('pop-animate'), 520);
-    }
-  });
-}
+  const showLabel = btn.textContent.trim();
+  const hideLabel = showLabel.replace(/^Show|^Read/, (m) => (m === 'Show' ? 'Hide' : 'Hide'));
 
-/* Modal popup handling */
-const modalTriggers = document.querySelectorAll('[data-modal]');
-const modals = document.querySelectorAll('.modal');
-
-const openModal = (id) => {
-  const modal = document.getElementById(id);
-  if (!modal) return;
-  const panel = modal.querySelector('.modal-panel');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('modal-open');
-  // animate
-  panel.classList.add('pop-animate');
-  setTimeout(() => panel.classList.remove('pop-animate'), 520);
-  // simple focus management
-  const focusEl = panel.querySelector('button, [href], input, textarea, select') || panel;
-  focusEl.focus();
-  modal.__previousActive = document.activeElement;
-};
-
-const closeModal = (modal) => {
-  if (!modal) return;
-  const panel = modal.querySelector('.modal-panel');
-  modal.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('modal-open');
-  panel.classList.add('popOut');
-  setTimeout(() => panel.classList.remove('popOut'), 300);
-  if (modal.__previousActive) modal.__previousActive.focus();
-};
-
-modalTriggers.forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    const id = btn.getAttribute('data-modal');
-    openModal(id);
-  });
-});
-
-modals.forEach((m) => {
-  // close on overlay or close buttons
-  m.addEventListener('click', (e) => {
-    if (e.target.hasAttribute('data-modal-close') || e.target === m) {
-      closeModal(m);
-    }
-  });
-  // close on ESC
-  document.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape' && m.getAttribute('aria-hidden') === 'false') {
-      closeModal(m);
-    }
-  });
-  // capture form submit (demo only)
-  const form = m.querySelector('.modal-form');
-  if (form) {
-    form.addEventListener('submit', (ev) => {
-      ev.preventDefault();
-      // simple success feedback
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.textContent = 'Sent ✓';
-      setTimeout(() => closeModal(m), 900);
-    });
-  }
-});
-
-// Apply 'popable' to commonly interactive elements for immediate micro-interactions
-document.querySelectorAll('.button, .contact-card, .project-card, .skill-card, .hero-card, .project-badge, .hero-actions a').forEach((el) => {
-  el.classList.add('popable');
-  // ensure focusability for non-button anchors
-  if (el.tagName === 'A') el.setAttribute('tabindex', '0');
-});
-
-// Add simple tooltips to hero action links if missing
-const heroLinks = document.querySelectorAll('.hero-actions a');
-if (heroLinks[0] && !heroLinks[0].hasAttribute('data-tooltip')) heroLinks[0].setAttribute('data-tooltip', 'View the electronics app');
-if (heroLinks[1] && !heroLinks[1].hasAttribute('data-tooltip')) heroLinks[1].setAttribute('data-tooltip', 'Open research summary');
-
-/* Theme selector handling (light/dark/retro) */
-/* Mini quiz implementation */
-const quizData = [
-  {
-    q: 'What grade is Ritvik in, and where does he go to school?',
-    a: 'He is a sophomore (Grade 10) at Walnut Grove High School in Prosper, Texas — expected to graduate in 2028.'
-  },
-  {
-    q: 'What does Ritvik do on VEX Robotics Team 2474V?',
-    a: 'He is the team programmer, coding and testing robots in Python, HTML, and CSS, and helping improve automation and movement accuracy for competitions.'
-  },
-  {
-    q: 'Has Ritvik led a robotics team before?',
-    a: 'Yes — he previously held multiple leadership positions and led his robotics team in India to win 2 awards.'
-  },
-  {
-    q: 'What two subjects did Ritvik tutor, and who did he teach?',
-    a: 'He tutored middle schoolers in Algebra 1 and Geometry as a Math Tutor, and taught chess fundamentals as a Chess Tutor.'
-  },
-  {
-    q: 'What sports and activities does Ritvik enjoy?',
-    a: 'He is an active badminton player and also competed in basketball and swimming for his school.'
-  },
-  {
-    q: "What's one of Ritvik's competition wins?",
-    a: 'He won the Math Olympiad and was the SFO Chess champion / interschool champion (2023–2024).'
-  },
-  {
-    q: 'What is Ritvik hoping to learn more about?',
-    a: 'Leadership skills, entrepreneurship, and software development — he is a quick learner who is curious and motivated.'
-  }
-];
-
-let quizIndex = 0;
-const quizContent = document.getElementById('quizContent');
-const quizPrev = document.getElementById('quizPrev');
-const quizNext = document.getElementById('quizNext');
-const quizShow = document.getElementById('quizShow');
-
-const renderQuiz = () => {
-  if (!quizContent) return;
-  const item = quizData[quizIndex];
-  quizContent.innerHTML = `
-    <p style="font-weight:700; font-family:var(--font-display); font-size:0.8rem; text-transform:uppercase;">Question ${quizIndex+1} of ${quizData.length}</p>
-    <p style="margin-top:10px; font-size:1.05rem;">${item.q}</p>
-    <div id="quizAnswer" style="margin-top:12px; color:var(--muted); display:none;">${item.a}</div>`;
-  // disable prev/next appropriately
-  if (quizPrev) quizPrev.disabled = quizIndex === 0;
-  if (quizNext) quizNext.disabled = quizIndex === quizData.length - 1;
-  if (quizShow) quizShow.textContent = 'Show Answer';
-};
-
-if (quizPrev) quizPrev.addEventListener('click', () => { quizIndex = Math.max(0, quizIndex - 1); renderQuiz(); });
-if (quizNext) quizNext.addEventListener('click', () => { quizIndex = Math.min(quizData.length - 1, quizIndex + 1); renderQuiz(); });
-if (quizShow) quizShow.addEventListener('click', () => {
-  const answerEl = document.getElementById('quizAnswer');
-  if (!answerEl) return;
-  if (answerEl.style.display === 'none') {
-    answerEl.style.display = 'block';
-    quizShow.textContent = 'Hide Answer';
-  } else {
-    answerEl.style.display = 'none';
-    quizShow.textContent = 'Show Answer';
-  }
-});
-
-// render first quiz when modal opens
-const quizModal = document.getElementById('quizModal');
-if (quizModal) {
-  quizModal.addEventListener('click', (e) => {
-    if (e.target === quizModal || e.target.hasAttribute('data-modal-close')) return;
-  });
-}
-
-// Whenever a modal opens, if it's the quiz modal, reset and render
-const originalOpenModal = openModal;
-openModal = (id) => {
-  originalOpenModal(id);
-  if (id === 'quizModal') {
-    quizIndex = 0;
-    renderQuiz();
-  }
-};
-
-/* ---------- Fun facts: floating button + panel ---------- */
-const funFacts = [
-  "I'm an 11th grader, but I already think in product features and user flows.",
-  "I built this entire site from scratch — HTML, CSS, and JS, no templates.",
-  "My long-term goal is to become an AI engineer who ships things people actually use.",
-  "I play basketball and badminton to balance out all the screen time.",
-  "Research is my favorite part of any project — I like understanding the 'why' before the 'how'.",
-  "I rebuilt this portfolio more than once just to get the small details right.",
-  "I'm most productive late at night with one tab open and zero notifications.",
-  "The electronics recycling app started as a school idea and became a real obsession.",
-  "I enjoy prototyping quickly in the browser to test ideas.",
-  "I prefer simple, clear interfaces over flashy features.",
-  "I often sketch UI ideas on paper before coding.",
-  "I'm learning AI by building small projects that solve real problems.",
-  "I like combining electronics knowledge with software to make useful tools.",
-  "My favorite debugging tool is console.log — simple and effective.",
-  "I like to keep a list of small projects to practice new skills.",
-  "I sometimes turn school projects into portfolio pieces, like the recycling app."
-];
-
-let factIndex = -1;
-const factButton = document.getElementById('factButton');
-const factPanel = document.getElementById('factPanel');
-const factPanelText = document.getElementById('factPanelText');
-const factNextBtn = document.querySelector('.fact-next-btn');
-const factCloseBtn = document.querySelector('.fact-panel-close');
-
-const showNextFact = () => {
-  let next = Math.floor(Math.random() * funFacts.length);
-  if (funFacts.length > 1 && next === factIndex) {
-    next = (next + 1) % funFacts.length;
-  }
-  factIndex = next;
-  factPanelText.textContent = funFacts[factIndex];
-};
-
-const openFactPanel = () => {
-  showNextFact();
-  factPanel.setAttribute('aria-hidden', 'false');
-  factButton.setAttribute('aria-expanded', 'true');
-};
-
-const closeFactPanel = () => {
-  factPanel.setAttribute('aria-hidden', 'true');
-  factButton.setAttribute('aria-expanded', 'false');
-};
-
-if (factButton && factPanel) {
-  factButton.addEventListener('click', () => {
-    const isOpen = factPanel.getAttribute('aria-hidden') === 'false';
-    if (isOpen) {
-      closeFactPanel();
+  btn.addEventListener('click', () => {
+    const isHidden = target.hasAttribute('hidden');
+    if (isHidden) {
+      target.removeAttribute('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.textContent = hideLabel;
     } else {
-      openFactPanel();
+      target.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.textContent = showLabel;
     }
   });
-  factNextBtn.addEventListener('click', showNextFact);
-  factCloseBtn.addEventListener('click', closeFactPanel);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && factPanel.getAttribute('aria-hidden') === 'false') {
-      closeFactPanel();
-    }
-  });
-  document.addEventListener('click', (e) => {
-    const isOpen = factPanel.getAttribute('aria-hidden') === 'false';
-    if (isOpen && !factPanel.contains(e.target) && e.target !== factButton) {
-      closeFactPanel();
-    }
-  });
-}
+});
 
-/* ---------- Scroll-triggered fun fact bubbles ---------- */
-const sectionFacts = {
-  about:      { emoji: '🎯', text: "I'm the programmer on VEX Robotics Team 2474V — coding in Python, HTML, and CSS.", pos: 'left' },
-  experience: { emoji: '🏀', text: "I was a basketball semi-finalist at SFO and finalist at Indus International School.", pos: 'right' },
-  skills:     { emoji: '♟️', text: "I'm a chess champion — SFO Chess champion and interschool champion.", pos: 'left' },
-  projects:   { emoji: '🏸', text: "Badminton is my main sport — I love the fast decision-making it demands.", pos: 'right' },
-  research:   { emoji: '🧮', text: "I'm a Math Olympiad winner (2023–2024) and tutored middle schoolers in Algebra & Geometry.", pos: 'left' },
-  contact:    { emoji: '🚀', text: "Long-term goal: build AI products and master entrepreneurship alongside software dev.", pos: 'right' },
-};
+/* ============ Circuit trace spine ============
+   Draws a single dashed path through the left margin of each
+   data-node section, with a via-dot at each node that lights up
+   (copper) as that section enters the viewport.
+*/
+const traceSvg = document.getElementById('trace');
+const tracePath = document.getElementById('tracePath');
+const nodeSections = Array.from(document.querySelectorAll('[data-node]'));
 
-const bubblesContainer = document.getElementById('factBubblesContainer');
-const shownFacts = new Set();
-const activeBubbles = [];
+let traceNodes = [];
 
-function spawnFactBubble(id, fact) {
-  const bubble = document.createElement('div');
-  bubble.className = 'fact-bubble fact-bubble--' + fact.pos;
-  bubble.setAttribute('role', 'status');
+function layoutTrace() {
+  if (!traceSvg || !tracePath || window.innerWidth <= 880) return;
 
-  const inner = document.createElement('div');
-  inner.className = 'fact-bubble__inner';
+  // remove old node dots
+  traceNodes.forEach((n) => n.remove());
+  traceNodes = [];
 
-  const emoji = document.createElement('span');
-  emoji.className = 'fact-bubble__emoji';
-  emoji.textContent = fact.emoji;
+  const docHeight = document.documentElement.scrollHeight;
+  traceSvg.setAttribute('width', '100%');
+  traceSvg.setAttribute('height', docHeight);
+  traceSvg.style.height = docHeight + 'px';
 
-  const text = document.createElement('p');
-  text.className = 'fact-bubble__text';
-  text.textContent = fact.text;
+  const x = 32; // fixed x offset from left edge of the page
+  let d = '';
 
-  const close = document.createElement('button');
-  close.className = 'fact-bubble__close';
-  close.setAttribute('aria-label', 'Dismiss');
-  close.textContent = '✕';
-  close.addEventListener('click', () => dismissBubble(bubble));
+  nodeSections.forEach((section, i) => {
+    const rect = section.getBoundingClientRect();
+    const top = rect.top + window.scrollY + 6;
 
-  inner.appendChild(emoji);
-  inner.appendChild(text);
-  inner.appendChild(close);
-  bubble.appendChild(inner);
-  bubblesContainer.appendChild(bubble);
+    d += i === 0 ? `M ${x} ${top}` : ` L ${x} ${top}`;
 
-  // reflow then animate in
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => { bubble.classList.add('fact-bubble--visible'); });
+    const dot = document.createElement('div');
+    dot.className = 'trace-node';
+    dot.style.left = x + 'px';
+    dot.style.top = top + 'px';
+    dot.dataset.nodeFor = section.id;
+    document.body.appendChild(dot);
+    traceNodes.push(dot);
   });
 
-  // Auto-dismiss after 6s
-  const timer = setTimeout(() => dismissBubble(bubble), 6000);
-  bubble._timer = timer;
-  activeBubbles.push(bubble);
-
-  // Limit to 2 bubbles visible at once
-  if (activeBubbles.length > 2) {
-    dismissBubble(activeBubbles[0]);
-  }
+  tracePath.setAttribute('d', d);
 }
 
-function dismissBubble(bubble) {
-  clearTimeout(bubble._timer);
-  bubble.classList.remove('fact-bubble--visible');
-  bubble.classList.add('fact-bubble--out');
-  setTimeout(() => {
-    if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
-    const idx = activeBubbles.indexOf(bubble);
-    if (idx > -1) activeBubbles.splice(idx, 1);
-  }, 420);
-}
+window.addEventListener('load', layoutTrace);
+window.addEventListener('resize', () => requestAnimationFrame(layoutTrace));
+// recompute after content/images settle and after reveal transitions
+setTimeout(layoutTrace, 300);
+setTimeout(layoutTrace, 1200);
 
-if (bubblesContainer) {
-  const factObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const id = entry.target.id;
-        if (entry.isIntersecting && sectionFacts[id] && !shownFacts.has(id)) {
-          shownFacts.add(id);
-          setTimeout(() => spawnFactBubble(id, sectionFacts[id]), 300);
-        }
-      });
-    },
-    { threshold: 0.25, rootMargin: '0px 0px -10% 0px' }
-  );
-
-  Object.keys(sectionFacts).forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) factObserver.observe(el);
-  });
-}
-
-/* ---------- Easter egg sprite popups ---------- */
-const eggPopup = document.getElementById('eggPopup');
-const eggPopupText = document.getElementById('eggPopupText');
-let eggTimer = null;
-
-if (eggPopup) {
-  document.querySelectorAll('.sprite.egg').forEach((sprite) => {
-    sprite.addEventListener('click', () => {
-      const fact = sprite.getAttribute('data-fact');
-      if (!fact) return;
-      eggPopupText.textContent = fact;
-      eggPopup.setAttribute('aria-hidden', 'false');
-      if (eggTimer) clearTimeout(eggTimer);
-      eggTimer = setTimeout(() => {
-        eggPopup.setAttribute('aria-hidden', 'true');
-      }, 4200);
+const nodeObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const dot = traceNodes.find((n) => n.dataset.nodeFor === entry.target.id);
+      if (!dot) return;
+      if (entry.isIntersecting) {
+        dot.classList.add('is-active');
+      } else {
+        dot.classList.remove('is-active');
+      }
     });
-  });
-
-  eggPopup.addEventListener('click', () => {
-    eggPopup.setAttribute('aria-hidden', 'true');
-    if (eggTimer) clearTimeout(eggTimer);
-  });
-}
+  },
+  { threshold: 0.3, rootMargin: '-10% 0px -40% 0px' }
+);
+nodeSections.forEach((s) => nodeObserver.observe(s));
