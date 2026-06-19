@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ritvik | Portfolio Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="background">
+    <span class="bubble bubble-1"></span>
+    <span class="bubble bubble-2"></span>
+    <span class="bubble bubble-3"></span>
+    <span class="bubble bubble-4"></span>
+    <span class="bubble bubble-5"></span>
+    <button type="button" class="sprite basketball basketball-1 egg" data-fact="I played competitive basketball — semi-finalist at SFO and finalist at Indus International School."></button>
+    <button type="button" class="sprite basketball basketball-2 egg" data-fact="I'm also a chess player — SFO Chess champion and interschool champion."></button>
+    <button type="button" class="sprite basketball basketball-3 egg" data-fact="I tutored middle schoolers in Algebra 1 and Geometry as a Math Tutor."></button>
+    <button type="button" class="sprite shuttle shuttle-1 egg" data-fact="Badminton is my main sport — I'm an active player who loves the fast decision-making."></button>
+    <button type="button" class="sprite shuttle shuttle-2 egg" data-fact="I'm a Math Olympiad winner from 2023–2024."></button>
+    <button type="button" class="sprite shuttle shuttle-3 egg" data-fact="I once won a swimming competition at Indus International School."></button>
+    <button type="button" class="sprite electronics electronics-1 egg" data-fact="I'm the programmer on VEX Robotics Team 2474V, coding in Python, HTML, and CSS."></button>
+    <button type="button" class="sprite electronics electronics-2 egg" data-fact="I led my robotics team in India to win 2 awards before moving to Texas."></button>
+    <button type="button" class="sprite electronics electronics-3 egg" data-fact="My favorite part of building the recycling app was the research, not the code — surprisingly."></button>
+    <button type="button" class="sprite electronics electronics-4 egg" data-fact="Long-term goal: pick up entrepreneurship and software development skills alongside AI."></button>
+  </div>
+  <div class="app-shell">
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle light and dark mode">🌙</button>
+    <header class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">Software Developer Intern</p>
+        <h1>Hi, I’m Ritvik</h1>
+        <p class="hero-text">
+          I am building an electronics recycling app with research-driven design, polished interaction, and accessible web experiences.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="button button-primary">View Electronics App</a>
+          <a href="#research" class="button button-secondary">See My Research</a>
+          <button class="button button-primary" data-modal="quizModal" type="button">Take mini-quiz</button>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <div class="hero-card-inner">
+          <p class="card-title">Resume Snapshot</p>
+          <div class="card-row">
+            <strong>Experience</strong>
+            <span>Software Intern · Web Development · UI/UX</span>
+          </div>
+          <div class="card-row">
+            <strong>Skills</strong>
+            <span>Python · HTML · CSS · Debugging · Circuits</span>
+          </div>
+          <div class="card-row">
+            <strong>Education</strong>
+            <span>Sophomore · Walnut Grove HS, Prosper TX</span>
+          </div>
+          <div class="hero-stat-grid">
+            <div class="stat-card">
+              <p>11</p>
+              <span>Grade 11 Student</span>
+            </div>
+            <div class="stat-card">
+              <p>AI + Apps</p>
+              <span>Future goal: AI Engineer</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </header>
+
+    <main>
+      <section class="section reveal" id="about">
+        <div class="section-heading">
+          <p>About Me</p>
+          <h2>Sophomore learning programming, robotics, and AI.</h2>
+        </div>
+        <div class="section-content split">
+          <div>
+            <p>
+              I'm a sophomore at Walnut Grove High School exploring AI development, software, and robotics. I'm a quick learner who enjoys mathematics, science, and solving new problems.
+            </p>
+            <p>
+              I know Python, HTML, and CSS, and I'm the programmer for my VEX Robotics team while studying how AI can power smarter, more useful software.
+            </p>
+          </div>
+          <ul class="about-list">
+            <li><strong>Goal:</strong> Become an AI Engineer and app developer</li>
+            <li><strong>Strength:</strong> Fast learner who adapts to new topics quickly</li>
+            <li><strong>Focus:</strong> Building apps, improving interfaces, and learning new technologies</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section reveal" id="experience">
+        <div class="section-heading">
+          <p>Experience</p>
+          <h2>Where I’ve grown my craft.</h2>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <span class="timeline-marker"></span>
+            <div class="timeline-content">
+              <h3>Electronics App Development</h3>
+              <span class="timeline-date">Summer 2025</span>
+              <p>Built a research-backed electronics recycling app with responsive UI, user journey mapping, and clean front-end interactions.</p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-marker"></span>
+            <div class="timeline-content">
+              <h3>School App Project</h3>
+              <span class="timeline-date">Academic Projects</span>
+              <p>Created school-based app experiences and learned how to connect research with real design decisions.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal" id="skills">
+        <div class="section-heading">
+          <p>Skills</p>
+          <h2>What I know and what I enjoy.</h2>
+        </div>
+        <div class="skill-grid">
+          <div class="skill-card">Python</div>
+          <div class="skill-card">HTML</div>
+          <div class="skill-card">CSS</div>
+        </div>
+        <div class="section-heading" style="margin-top: 40px;">
+          <p>Interests</p>
+          <h2>What I enjoy outside the screen.</h2>
+        </div>
+        <div class="skill-grid">
+          <div class="skill-card">Robotics</div>
+          <div class="skill-card">Basketball</div>
+          <div class="skill-card">Badminton</div>
+        </div>
+      </section>
+
+      <section class="section reveal" id="projects">
+        <div class="section-heading">
+          <p>Project</p>
+          <h2>My electronics app and the research behind it.</h2>
+        </div>
+        <div class="project-grid">
+          <article class="project-card interactive-card">
+            <div class="project-card-top">
+              <div>
+                <h3>Electronics Research App</h3>
+                <span class="project-badge">Research-led Product</span>
+              </div>
+            </div>
+            <p>
+              Designed and developed an electronics recycling awareness app informed by research, user interviews, and sustainability-focused UI flows. The app helps users identify responsible disposal options and understand recycling impact.
+            </p>
+            <button class="button button-secondary project-toggle-btn" type="button">Show research details</button>
+            <button class="button button-primary pop-trigger" data-modal="projectModal" type="button">Open project popup</button>
+            <div class="project-details">
+              <h4>Research highlights</h4>
+              <ul>
+                <li>Surveyed user behavior around electronics disposal.</li>
+                <li>Mapped user journeys for drop-off, pickup, and recycling guidance.</li>
+                <li>Created an intuitive mobile-friendly interface for fast decision making.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal" id="research">
+        <div class="section-heading">
+          <p>Research</p>
+          <h2>What I learned while building the electronics app.</h2>
+        </div>
+        <div class="contact-card research-card">
+          <h3>Electronics research summary</h3>
+          <p>
+            I studied user behavior around electronic waste, planned app features to make recycling easier, and created a simple interface for students and families.
+          </p>
+          <ul>
+            <li>Identified key user needs: easy disposal, local recycling info, and environmental impact awareness.</li>
+            <li>Designed a mobile-first app flow for quick guidance and clear choices.</li>
+            <li>Documented research findings and translated them into usable app screens.</li>
+          </ul>
+          <button class="button button-secondary research-toggle-btn" type="button">Read the full research document</button>
+          <div class="research-document" aria-hidden="true">
+            <h4>Research Document</h4>
+            <p>My electronics recycling app project brings together research, user-centered design, and practical app development. This document shows the study, features, and lessons learned while creating a product that helps people make better recycling decisions.</p>
+            <h5>Project Goal</h5>
+            <p>Build a simple, student-friendly app that makes it easy to understand and act on electronic waste recycling options.</p>
+            <h5>What I Studied</h5>
+            <ul>
+              <li>How people currently dispose of old electronics.</li>
+              <li>What stops users from recycling electronics responsibly.</li>
+              <li>Which app features would help users make better decisions quickly.</li>
+            </ul>
+            <h5>App Features I Designed</h5>
+            <ul>
+              <li>A clean home screen with clear steps for recycling electronics.</li>
+              <li>Location-based pickup and drop-off guidance.</li>
+              <li>Educational cards explaining environmental impact and safe disposal.</li>
+            </ul>
+            <h5>What I Learned</h5>
+            <ul>
+              <li>Research improves design by focusing on real user needs.</li>
+              <li>Building apps means balancing useful features with easy, fast interactions.</li>
+              <li>I want to continue learning AI and app development to build tools that solve real problems.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact-section reveal" id="contact">
+        <div class="section-heading">
+          <p>Contact</p>
+          <h2>Let’s connect and build apps or AI tools.</h2>
+        </div>
+        <div class="contact-card contact-grid">
+          <div>
+            <p>
+              I'm a sophomore studying programming, AI, and robotics. I enjoy building useful tools and learning new ways to solve problems.
+            </p>
+            <p>
+              I am open to opportunities to collaborate on projects, learn from mentors, and create apps that solve real problems.
+            </p>
+          </div>
+          <div class="contact-actions">
+            <a href="mailto:ritvik@example.com" class="button button-primary">Send Email</a>
+            <button class="button button-secondary pop-trigger" data-modal="contactModal" type="button">Quick message</button>
+            <p class="contact-note">Available for school projects, app design, and AI learning opportunities.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal containers -->
+  <div id="projectModal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="projectModalTitle">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-panel popable" role="document">
+      <button class="modal-close" aria-label="Close modal" data-modal-close>✕</button>
+      <h3 id="projectModalTitle">Electronics App — Quick View</h3>
+      <p>Quick summary: a student-friendly app to help people recycle electronics responsibly, with location guidance and educational UI cards.</p>
+      <ul>
+        <li>Mobile-first flows for fast decision making</li>
+        <li>Location-based recycling options</li>
+        <li>Educational content and safe disposal steps</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="contactModal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="contactModalTitle">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-panel popable" role="document">
+      <button class="modal-close" aria-label="Close modal" data-modal-close>✕</button>
+      <h3 id="contactModalTitle">Quick Message</h3>
+      <p>If you'd like to collaborate, email me at <a href="mailto:ritvik@example.com">ritvik@example.com</a> or leave a quick note here.</p>
+      <form class="modal-form">
+        <label>
+          <span class="sr-only">Your message</span>
+          <textarea name="message" rows="4" placeholder="Hi Ritvik — I'm interested in..." required></textarea>
+        </label>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button type="submit" class="button button-primary">Send</button>
+          <button type="button" class="button button-secondary" data-modal-close>Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Quiz modal -->
+  <div id="quizModal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="quizModalTitle">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-panel popable" role="document">
+      <button class="modal-close" aria-label="Close modal" data-modal-close>✕</button>
+      <h3 id="quizModalTitle">Mini Quiz — Electronics & Apps</h3>
+      <div id="quizContent">
+        <!-- populated by script.js -->
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px; justify-content:space-between;">
+        <div>
+          <button id="quizPrev" class="button button-secondary">Previous</button>
+          <button id="quizNext" class="button button-secondary">Next</button>
+        </div>
+        <div>
+          <button id="quizShow" class="button button-primary">Show Answer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Fun facts floating trigger + panel -->
+  <button id="factButton" class="fact-fab popable" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="factPanel" data-tooltip="Random fact about me">✨</button>
+  <div id="factPanel" class="fact-panel" role="dialog" aria-hidden="true" aria-labelledby="factPanelTitle">
+    <div class="fact-panel-head">
+      <span id="factPanelTitle" class="fact-panel-label">Fun fact</span>
+      <button type="button" class="fact-panel-close" aria-label="Close fun fact panel">✕</button>
+    </div>
+    <p id="factPanelText" class="fact-panel-text">Click again for another one.</p>
+    <button type="button" class="button button-secondary fact-next-btn">Next fact →</button>
+  </div>
+
+  <!-- Scroll-triggered fact bubble (one ambient, dismissible card) -->
+  <div id="scrollFactBubble" class="scroll-fact" aria-hidden="true">
+    <p id="scrollFactText"></p>
+    <button type="button" class="scroll-fact-close" aria-label="Dismiss">✕</button>
+  </div>
+
+  <!-- Easter egg fact popup (for background sprites) -->
+  <div id="eggPopup" class="egg-popup" aria-hidden="true">
+    <p id="eggPopupText"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
